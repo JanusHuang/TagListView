@@ -113,7 +113,7 @@ open class TagListView: UIView {
             rearrangeViews()
         }
     }
-    
+
     @objc public enum Alignment: Int {
         case left
         case center
@@ -229,7 +229,9 @@ open class TagListView: UIView {
         var currentRowTagCount = 0
         var currentRowWidth: CGFloat = 0
         for (index, tagView) in tagViews.enumerated() {
-            tagView.frame.size = tagView.intrinsicContentSize
+            var size = tagView.intrinsicContentSize
+            size.width = min(bounds.width, size.width)
+            tagView.frame.size = size
             tagViewHeight = tagView.frame.height
             
             if currentRowTagCount == 0 || currentRowWidth + tagView.frame.width > frame.width {
@@ -285,7 +287,7 @@ open class TagListView: UIView {
     
     private func createNewTagView(_ title: String) -> TagView {
         let tagView = TagView(title: title)
-        
+        tagView.titleLabel?.adjustsFontSizeToFitWidth = true
         tagView.textColor = textColor
         tagView.selectedTextColor = selectedTextColor
         tagView.tagBackgroundColor = tagBackgroundColor
